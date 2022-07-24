@@ -30,15 +30,16 @@ def get_cheapest_stations_on_route(path, distance_km, fuel_type):
     start = path[0]
     end = path[-1]
 
+    offset = 0.01
     if start[0] > end[0]:
-        lat_cond = (start[0] + 0.1, end[0] - 0.1)
+        lat_cond = (start[0] + offset, end[0] - offset)
     else:
-        lat_cond = (end[0] + 0.1, start[0] - 0.1)
+        lat_cond = (end[0] + offset, start[0] - offset)
 
     if start[1] > end[1]:
-        long_cond = (start[1] + 0.1, end[1] - 0.1)
+        long_cond = (start[1] + offset, end[1] - offset)
     else:
-        long_cond = (end[1] + 0.1, start[1] - 0.1)
+        long_cond = (end[1] + offset, start[1] - offset)
 
     with Session() as session:
         select_coords = select(
@@ -69,7 +70,7 @@ def get_cheapest_stations_on_route(path, distance_km, fuel_type):
                 distance.distance(
                     path_node, (station["latitude"], station["longitude"])
                 ).km
-                <= distance_km
+                <= distance_km / 1.5  # divide to account for somewhat round trips
             ):
                 close_stations.append(station)
 

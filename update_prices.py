@@ -5,6 +5,8 @@ Update the database with the latest fuel prices
 import re
 import time
 
+from sqlalchemy import insert, update
+
 from sql import Station, Session
 import requests
 import feedparser
@@ -67,60 +69,54 @@ def update_db():
     # list of station names already inserted into db
     names = []
     for station_info in stations:
-        latitude = station_info["latitude"]
-        longitude = station_info["longitude"]
-        name = station_info["trading-name"]
         # For some reason there are duplicate stations with slightly different coordinates in the rss feed
-        if name in names:
+        if station_info["trading-name"] in names:
             continue
-        names.append(name)
-        description = re.sub(cleanup_description, "", station_info["description"])
-        brand = station_info["brand"]
-        suburb = station_info["location"]
-        address = station_info["address"]
+        names.append(station_info["trading-name"])
 
-        # Not every station will have every fuel type, so we use `.get` to avoid KeyError
-        unleaded_91 = station_info.get("unleaded_91")
-        unleaded_95 = station_info.get("unleaded_95")
-        unleaded_98 = station_info.get("unleaded_98")
-        diesel = station_info.get("diesel")
-        premium_diesel = station_info.get("premium_diesel")
-        lpg = station_info.get("lpg")
-        e85 = station_info.get("e85")
+        latitude = float(station_info["latitude"])
+        longitude = float(station_info["longitude"])
+        info_args = {
+            "name": station_info["trading-name"],
+            "description": re.sub(cleanup_description, "", station_info["description"]),
+            "brand": station_info["brand"],
+            "suburb": station_info["location"],
+            "address": station_info["address"],
+            "last_update": last_update,
+            # Not every station will have every fuel type, so we use `.get` to avoid KeyError
+            "unleaded_91": station_info.get("unleaded_91"),
+            "unleaded_95": station_info.get("unleaded_95"),
+            "unleaded_98": station_info.get("unleaded_98"),
+            "diesel": station_info.get("diesel"),
+            "premium_diesel": station_info.get("premium_diesel"),
+            "lpg": station_info.get("lpg"),
+            "e85": station_info.get("e85"),
+        }
 
-        with Session.begin() as session:
-            station = (
-                session.query(Station)
+        with Session() as session:
+            station_exists = (
+                session.query(Station.name)
                 .filter_by(latitude=latitude, longitude=longitude)
                 .first()
+                is not None
             )
 
-            if not station:
-                station = Station(
-                    latitude=latitude,
-                    longitude=longitude,
-                    name=name,
-                    brand=brand,
-                    description=description,
-                    suburb=suburb,
-                    address=address,
-                    last_update=last_update,
+            if not station_exists:
+                info_args.update({"latitude": latitude, "longitude": longitude})
+                insert_stmt = insert(Station).values(
+                    info_args,
                 )
+                session.execute(insert_stmt)
+                session.commit()
+                continue
 
-            session.add(station)
-            station.last_update = last_update
-            station.unleaded_91 = unleaded_91
-            station.unleaded_95 = unleaded_95
-            station.unleaded_98 = unleaded_98
-            station.diesel = diesel
-            station.premium_diesel = premium_diesel
-            station.lpg = lpg
-            station.e85 = e85
-
-            # Update these just in case the petrol station changed ownership or opening hours
-            station.name = name
-            station.brand = brand
-            station.description = description
+            update_stmt = (
+                update(Station)
+                .where(Station.latitude == latitude, Station.longitude == longitude)
+                .values(info_args)
+            )
+            session.execute(update_stmt)
+            session.commit()
 
 
 if __name__ == "__main__":
