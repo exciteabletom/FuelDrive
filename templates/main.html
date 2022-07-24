@@ -1,11 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-
 	{% include "meta.html" %}
 	<title>{{ app_name }}</title>
+	<!-- Leaflet -->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+	      integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+	      crossorigin=""/>
+	<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+	        integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+	        crossorigin=""></script>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css"/>
+	<script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/tomik23/autocomplete@1.8.3/dist/js/autocomplete.min.js" defer></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tomik23/autocomplete@1.8.3/dist/css/autocomplete.min.css" defer/>
+
 </head>
 <body>
-
+{% include "header.html" %}
+<form id="main-form" method="get" action="/find_stations/">
+	<div class="auto-search-wrapper">
+		<input
+				name="startAddress"
+				type="text"
+				autocomplete="off"
+				id="startAddress"
+				class="full-width"
+				placeholder="Enter your start location"
+				required
+		/>
+		<input
+				name="endAddress"
+				type="text"
+				autocomplete="off"
+				id="endAddress"
+				class="full-width"
+				placeholder="Enter your destination"
+				required
+		/>
+		<br>
+		<br>
+		<select name="fueltype" required>
+			<option value="unleaded_91">Unleaded 91</option>
+			<option value="unleaded_95">Unleaded 95</option>
+			<option value="unleaded_98">Unleaded 98</option>
+			<option value="diesel">Diesel</option>
+			<option value="premium_diesel">Premium Diesel</option>
+			<option value="lpg">LPG</option>
+			<option value="e85">E85</option>
+		</select>
+		<br>
+		<br>
+		<label for="distance">Max deviation from route</label>
+		<input id=distance name="distance" type="number" min="5" max="150" placeholder="Distance in km" required/>
+		<input id="startCoords" name="startCoords" type="text">
+		<input id="endCoords" name="endCoords" type="text">
+		<input type="submit" value="Submit">
+	</div>
+</form>
+<div id="map"></div>
+<script src="{{ url_for("static", filename="js/map.js") }}" defer></script>
 </body>
 </html>

@@ -4,3 +4,6 @@ venv/
 .env/
 env/
 __pycache__/
+prices.sqlite
+TOMTOM_KEY
+cache/

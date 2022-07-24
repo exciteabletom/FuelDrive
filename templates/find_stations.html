@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	{% include "meta.html" %}
+	<title>Find Petrol Stations on {{ app_name }}</title>
+</head>
+<body>
+{% include "header.html" %}
+<main>
+	<table class="stations-table">
+		<tr class="stations-table-header-row">
+			<th>Name</th>
+			<th>Price</th>
+			<th>Address</th>
+		</tr>
+		{% for station in close_stations %}
+		<tr>
+			<td>{{ station.name }}</td>
+			<td>{{ station.price }}</td>
+			<td><a href="https://www.google.com/maps/dir/{{ start }}/{{ station.name }}, Western Australia/{{ end }}">{{ station.address }}</a></td>
+		</tr>
+		{% endfor %}
+	</table>
+</main>
+<footer>
+	<a href="{{ url_for("main_page") }}">Enter a new route</a>
+</footer>
+</body>
+</html>

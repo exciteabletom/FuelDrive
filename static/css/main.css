@@ -1,1 +1,72 @@
-fon
+.main-header {
+	height: 15vh;
+	max-height: 200px;
+	display: flex;
+	justify-content: center;
+}
+.main-header h1, h2 {
+	margin: 0;
+}
+.main-header > .header-text {
+	display: flex;
+	flex-flow: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+#main-form {
+	width: 95vw;
+	max-width: 400px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-bottom: 1rem;
+}
+#main-form input {
+	margin-top: 0.5rem;
+}
+#main-form input[type=submit]{
+	text-align: center;
+	padding: 1rem;
+	width: 80%;
+	margin-left: 10%;
+}
+#main-form .auto-clear {
+	display: none;
+}
+#main-form input[name="endCoords"], #main-form input[name="startCoords"] {
+	display: none;
+}
+#map {
+	height:30vh;
+	max-height: 60vw;
+	width: 80vw;
+	min-width: 400px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.stations-table {
+	text-align: center;
+	margin-top: 2rem;
+	margin-left: auto;
+	margin-right: auto;
+}
+.stations-table td, .stations-table th {
+	padding: 0.5rem;
+}
+.stations-table tr:nth-child(even) > td {
+	background: #c2c1c1;
+	border-radius: 1rem;
+}
+.stations-table th {
+	margin: 0.5rem;
+	background: #3f7aff;
+	border-radius: 1rem;
+}
+
+footer {
+	display: flex;
+	justify-content: center;
+	font-size: 1.2rem;
+	margin-top: 1rem;
+}
