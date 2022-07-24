@@ -53,15 +53,15 @@
 }
 .stations-table td, .stations-table th {
 	padding: 0.5rem;
+	border-radius: 0.1rem;
+	border: solid black 2px;
 }
-.stations-table tr:nth-child(even) > td {
+.stations-table td {
 	background: #c2c1c1;
-	border-radius: 1rem;
 }
 .stations-table th {
 	margin: 0.5rem;
 	background: #3f7aff;
-	border-radius: 1rem;
 }
 
 footer {
