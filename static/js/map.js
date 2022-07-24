@@ -14,7 +14,6 @@ function set_address_number(address, variable) {
 
 function display_address_number(variable) {
   if (window.numbers[variable]) {
-    console.log(variable);
     let el = document.getElementById(variable + "Address");
     el.value = window.numbers[variable] + " " + el.value;
   }
@@ -202,7 +201,9 @@ const form = document.getElementById("main-form");
 form.addEventListener("submit", () => {
   document.getElementById("startCoords").value = window.start_coords;
   document.getElementById("endCoords").value = window.end_coords;
+  setTimeout(() => {
+    form.reset()
+  }, 0.5)
 })
-form.addEventListener("load", () => {
-  form.reset();
+window.addEventListener("focus", () => {
 })
