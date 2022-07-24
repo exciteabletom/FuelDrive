@@ -27,6 +27,11 @@ def shortest_path(start, dest, station=None):
 
 
 def get_cheapest_stations_on_route(path, distance_km, fuel_type):
+    l = len(path)
+    # If path is too long grab ~100 points from the start, middle, and end to reduce size to ~300
+    if l > 300:
+        path = path[:100] + path[round(l / 2 - 50) : round(l / 2 + 50)] + path[-100:]
+
     start = path[0]
     end = path[-1]
 
