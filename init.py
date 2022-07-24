@@ -5,11 +5,11 @@ First-time initalisation tasks
 import sql
 
 
-def init_db() -> None:
+def init_db():
     sql.Base.metadata.create_all(sql.engine)
 
 
-def init() -> None:
+def init():
     init_db()
 
 

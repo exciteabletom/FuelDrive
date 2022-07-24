@@ -25,7 +25,7 @@ FUEL_TYPES = {
 cleanup_description = re.compile("(^.*?),(.*?), ")
 
 
-def get_stations() -> list[dict]:
+def get_stations():
     """
     Scrapes the FuelWatch RSS feed for information about WA petrol stations.
 
