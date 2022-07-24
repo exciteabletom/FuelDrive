@@ -5,7 +5,7 @@ Update the database with the latest fuel prices
 import re
 import time
 
-from sqlalchemy import insert, update
+from sqlalchemy import insert, update, delete
 
 from sql import Station, Session
 import requests
@@ -118,6 +118,19 @@ def update_db():
             session.execute(update_stmt)
             session.commit()
 
+    return last_update
+
+
+def clean_db(epoch_time: int):
+    """
+    Delete old stations that are no longer tracked by FuelWatch
+    """
+    with Session() as session:
+        stmt = delete(Station).where(Station.last_update < epoch_time)
+        session.execute(stmt)
+        session.commit()
+
 
 if __name__ == "__main__":
-    update_db()
+    update_time = update_db()
+    clean_db(update_time)
