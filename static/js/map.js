@@ -15,7 +15,9 @@ function set_address_number(address, variable) {
 function display_address_number(variable) {
   if (window.numbers[variable]) {
     let el = document.getElementById(variable + "Address");
-    el.value = window.numbers[variable] + " " + el.value;
+    if (! el.value.match(/^\d*/g).join("")) {
+      el.value = window.numbers[variable] + " " + el.value;
+    }
   }
 }
 // minimal configure

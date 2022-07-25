@@ -82,7 +82,9 @@ def get_cheapest_stations_on_route(path, distance_km, fuel_type):
     # Sort by best price
     close_stations.sort(key=lambda x: x[fuel_type])
     # Truncate stations and convert from Row to dict
-    close_stations = [dict(i) for i in close_stations[:6]]
+    close_stations = [
+        dict(i) for i in close_stations[: min((len(close_stations) - 1, 8))]
+    ]
 
     for station in close_stations:
         price = station.pop(fuel_type)

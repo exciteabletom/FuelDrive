@@ -23,7 +23,7 @@ def find_stations():
     end = request.args.get("endCoords")
     start_address = request.args.get("startAddress")
     end_address = request.args.get("endAddress")
-    fuel_type = request.args.get("fueltype")
+    fuel_type = request.args.get("fuelType")
     distance = int(request.args.get("distance"))
     route_distance, path = shortest_path(start, end)
     close_stations = get_cheapest_stations_on_route(path, distance, fuel_type)
